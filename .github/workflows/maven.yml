@@ -25,8 +25,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4 # Updated from @master to @v4
+
+      # ADD THIS STEP: Snyk needs Java to run 'mvn dependency:tree'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: maven
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
+
+        with:
+          # This helps Snyk find the pom.xml if it's struggling
+          args: --file=pom.xml
+
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
