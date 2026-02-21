@@ -36,13 +36,12 @@ jobs:
 
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
-
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.18-8/x64
         with:
           # This helps Snyk find the pom.xml if it's struggling
           args: --file=pom.xml
-
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   zap_scan:
     needs: test-with-JDK17 # Added this so ZAP only runs if tests pass
